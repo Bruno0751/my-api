@@ -6,18 +6,24 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.GenerationType;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.Getter;
+import lombok.ToString;
 import org.springframework.hateoas.RepresentationModel;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Setter
 @Getter
+@ToString
 @Entity
-@Table(name = "tb_cliente")
+@Table(name = "tb_clientes")
 public class ClienteModel extends RepresentationModel<ClienteModel> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,9 +39,10 @@ public class ClienteModel extends RepresentationModel<ClienteModel> implements S
 
     private Double altura;
 
-//    private Date dataRegistro;
+    @NotNull
+    private LocalDate data;
 
-//    @NotNull
-//    private Time hrRegistro;
+    @NotNull
+    private LocalTime hora;
 
 }
