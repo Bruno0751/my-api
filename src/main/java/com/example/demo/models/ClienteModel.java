@@ -5,6 +5,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.GenerationType;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,7 @@ public class ClienteModel extends RepresentationModel<ClienteModel> implements S
     private UUID idCliente;
 
     @NotNull
+    @NotBlank
     private String nome;
 
     private Integer idade;
