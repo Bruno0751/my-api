@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.api.ClienteApi;
 import com.example.demo.dtos.ClienteRecordDto;
+import com.example.demo.models.Cliente;
 import com.example.demo.models.ClienteModel;
 import com.example.demo.repositories.ClienteRepository;
 import jakarta.validation.Valid;
@@ -21,31 +22,31 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-public class ClenteController implements ClienteApi {
+public class ClinteController implements ClienteApi {
 
     @Autowired
     ClienteRepository clienteRepository;
 
-    public ResponseEntity<ClienteModel> insertCliente(ClienteRecordDto clienteRecordDto) {
+    public ClienteModel insertCliente(ClienteRecordDto clienteRecordDto) {
         System.out.println("INTO insertCliente");
         System.out.println(clienteRecordDto.toString());
         var clienteModel = new ClienteModel();
         clienteModel.setData(LocalDate.now());
         clienteModel.setHora(LocalTime.now());
         BeanUtils.copyProperties(clienteRecordDto, clienteModel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteRepository.save(clienteModel));
+        return clienteRepository.save(clienteModel);
     }
 
-    public ResponseEntity<List<ClienteModel>> findCliente() {
+    public List<ClienteModel> findCliente() {
         System.out.println("INTO findCliente");
         List<ClienteModel> listaClienteModel = clienteRepository.findAll();
         if (!listaClienteModel.isEmpty()) {
             for (ClienteModel cliente : listaClienteModel) {
                 UUID id = cliente.getIdCliente();
-                cliente.add(linkTo(methodOn(ClenteController.class).getCliente(id)).withSelfRel());
+                cliente.add(linkTo(methodOn(ClinteController.class).getCliente(id)).withSelfRel());
             }
         }
-        return ResponseEntity.status(HttpStatus.OK).body(clienteRepository.findAll());
+        return clienteRepository.findAll();
     }
 
     public Object getCliente(UUID id) {
@@ -78,4 +79,19 @@ public class ClenteController implements ClienteApi {
         clienteRepository.delete(optional.get());
         return ResponseEntity.status(HttpStatus.OK).body("CLIENTE DELETADO");
     }
+
+    @Override
+    public long count() {
+        System.out.println("INTO count");
+        return clienteRepository.count();
+    }
+
+    @Override
+    public Cliente buscarId() {
+        System.out.println("INTO buscarId");
+        var cliente = new Cliente();
+        BeanUtils.copyProperties(clienteRepository.findID(), cliente);
+        return cliente;
+    }
+
 }
