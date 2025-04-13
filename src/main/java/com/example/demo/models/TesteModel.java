@@ -20,29 +20,25 @@ import java.util.UUID;
 @Getter
 @ToString
 @Entity
-@Table(name = "cliente")
-public class ClienteModel extends RepresentationModel<ClienteModel> implements Serializable {
+@Table(name = "teste")
+public class TesteModel {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID idCliente;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idTeste", nullable = false)
+    private Long idTeste;
 
     @NotBlank(message = "O campo 'name' não pode ser vazio. Por favor, forneça um valor válido.")
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Nullable
-    @Column(name = "old_year")
-    private Integer oldYear;
+    @NotNull(message = "O campo 'old_year' não pode ser vazio. Por favor, forneça um valor válido.")
+    @Column(name = "old_year", nullable = false)
+    private int oldYear;
 
     @Nullable
     @Column(name = "heigth")
     private Double heigth;
-
-    @NotNull(message = "O campo 'data_time' não pode ser null. Por favor, forneça um valor válido.")
-    @Column(name = "data_time", nullable = false)
-    private Timestamp dataTime;
-
 }

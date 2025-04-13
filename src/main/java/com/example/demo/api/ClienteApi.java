@@ -1,7 +1,6 @@
 package com.example.demo.api;
 
 import com.example.demo.dtos.ClienteRecordDto;
-import com.example.demo.models.ClienteAltura;
 import com.example.demo.models.ClienteModel;
 import io.swagger.annotations.Api;
 import jakarta.validation.Valid;
@@ -23,11 +22,11 @@ import java.util.UUID;
 public interface ClienteApi {
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "")
+    @PostMapping(value = "/")
     ClienteModel insert(@RequestBody @Valid ClienteRecordDto clienteRecordDto);
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "")
+    @GetMapping(value = "/")
     List<ClienteModel> find();
 
     @ResponseStatus(HttpStatus.OK)
