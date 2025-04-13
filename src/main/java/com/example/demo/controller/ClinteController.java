@@ -2,9 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.api.ClienteApi;
 import com.example.demo.dtos.ClienteRecordDto;
-import com.example.demo.models.ClienteAltura;
 import com.example.demo.models.ClienteModel;
 import com.example.demo.repositories.ClienteRepository;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
-
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,15 +29,20 @@ public class ClinteController implements ClienteApi {
     ClienteRepository clienteRepository;
 
     public ClienteModel insert(ClienteRecordDto clienteRecordDto) {
-        System.out.println("INTO insert");
         var clienteModel = new ClienteModel();
         clienteModel.setDataTime(new Timestamp(System.currentTimeMillis()));
         BeanUtils.copyProperties(clienteRecordDto, clienteModel);
-        return clienteRepository.save(clienteModel);
+        try {
+            return clienteRepository.save(clienteModel);
+        } catch (ConstraintViolationException e) {
+            e.getConstraintViolations().forEach(violation -> {
+                System.out.println(violation.getMessage());
+            });
+        }
+        return null;
     }
 
     public List<ClienteModel> find() {
-        System.out.println("INTO find");
         List<ClienteModel> listaClienteModel = clienteRepository.findAll();
         if (!listaClienteModel.isEmpty()) {
             for (ClienteModel cliente : listaClienteModel) {
@@ -51,7 +54,6 @@ public class ClinteController implements ClienteApi {
     }
 
     public Object findOne(UUID id) {
-        System.out.println("INTO findOne");
         Optional<ClienteModel> optional = clienteRepository.findById(id);
         if (optional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NAO ENCONTRADO");
@@ -61,7 +63,6 @@ public class ClinteController implements ClienteApi {
 
     public ResponseEntity<Object> update(@PathVariable(value = "id") UUID id,
                                                 @RequestBody @Valid ClienteRecordDto clienteRecordDto) {
-        System.out.println("INTO update");
         Optional<ClienteModel> optional = clienteRepository.findById(id);
         if (optional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NAO ENCONTRADO");
@@ -72,7 +73,6 @@ public class ClinteController implements ClienteApi {
     }
 
     public ResponseEntity<Object> delete(@PathVariable(value = "id") UUID id) {
-        System.out.println("INTO delete");
         Optional<ClienteModel> optional = clienteRepository.findById(id);
         if (optional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NAO ENCONTRADO");
@@ -83,7 +83,6 @@ public class ClinteController implements ClienteApi {
 
     @Override
     public long count() {
-        System.out.println("INTO count");
         return clienteRepository.count();
     }
 
